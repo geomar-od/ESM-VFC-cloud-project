@@ -19,10 +19,10 @@ n2-standard-2	2	8GB	$0.125124	$0.02876
 n2d-standard-2	2	8GB	$0.108854	$0.02502
 n1-standard-2	2	7.5GB	$0.122400	$0.02460
 
-e2-standard-2	2	8GB	$63.02		$18.90
-n2-standard-2	2	8GB	$73.07		$20.99 (with 20% sustained use discount)
-n2d-standard-2	2	8GB	$63.57		$18.26 (with 20% sustained use discount)
-n1-standard-2	2	7.5GB	$62.55		$17.96 (with 30% sustained use discount)
+e2-standard-2	2	8GB	$63.02		$18.90 (no additional discounts)
+n2-standard-2	2	8GB	$73.07		$20.99 (20% sustained use discounts)
+n2d-standard-2	2	8GB	$63.57		$18.26 (20% sustained use discounts)
+n1-standard-2	2	7.5GB	$62.55		$17.96 (30% sustained use discounts)
 ```
 
 For the test setup, which will only be running a few days, use the `e2-standard-2` machine-type for now. (Which differs from the example in the [JupyterHub GCP deployment docs](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/google/step-zero-gcp.html).)
