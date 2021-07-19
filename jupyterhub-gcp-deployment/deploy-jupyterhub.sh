@@ -12,7 +12,5 @@ helm upgrade --cleanup-on-fail \
   --version=1.0.1 \
   --values config.yaml
 
-kubectl get pod --namespace jupyterhub-k8s-1
 kubectl get service --namespace jupyterhub-k8s-1
 kubectl describe service proxy-public --namespace jupyterhub-k8s-1
-
