@@ -11,14 +11,16 @@
 
 hub:
   config:
+    JupyterHub:
+      authenticator_class: nativeauthenticator.NativeAuthenticator
+      admin_access: false
     Authenticator:
       admin_users:
         - user1
-      allowed_users:
-        - user2
-        - user3
-    DummyAuthenticator:
-      password: a-shared-secret-password
-    JupyterHub:
-      authenticator_class: dummy
-      admin_access: false
+    NativeAuthenticator:
+      enable_signup: true
+      minimum_password_length: 10
+      check_common_password: true
+      ask_email_on_signup: false
+      allow_2fa: false
+
