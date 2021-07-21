@@ -8,6 +8,8 @@
 # Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
 # Available chart versions: https://jupyterhub.github.io/helm-chart/
 #
+# Config schemes: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/main/jupyterhub/schema.yaml
+#
 
 hub:
   config:
@@ -23,4 +25,15 @@ hub:
       check_common_password: true
       ask_email_on_signup: false
       allow_2fa: false
+
+proxy:
+  service:
+    disableHttpPort: true
+  https:
+    enabled: true
+    type: secret
+    secret:
+      name: self-signed-tls
+      key: tls.key
+      crt: tls.crt
 
