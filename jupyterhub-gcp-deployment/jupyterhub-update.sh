@@ -1,13 +1,14 @@
 
-NAMESPACE=jupyterhub-k8s-1
+source gcp-config.sh
 
-helm list --namespace ${NAMESPACE}
+helm list --namespace ${K8S_NAMESPACE}
 
 helm upgrade \
+  ${HELM_RELEASE} jupyterhub/jupyterhub \
+  --namespace ${K8S_NAMESPACE} \
   --cleanup-on-fail \
-  --namespace ${NAMESPACE} \
-  jupyterhub-hr-1 jupyterhub/jupyterhub \
   --version=1.0.1 \
   --values config.yaml
 
-kubectl get pod --namespace ${NAMESPACE}
+kubectl get pod --namespace ${K8S_NAMESPACE}
+

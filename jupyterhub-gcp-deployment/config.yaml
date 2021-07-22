@@ -37,3 +37,18 @@ proxy:
       key: tls.key
       crt: tls.crt
 
+singleuser:
+  image:
+    name: jupyter/base-notebook
+    tag: d39fb37995ce
+  defaultUrl: "/lab"
+  profileList:
+    - display_name: "jupyter/base-notebook:d39fb37995ce"
+      description: "very minimal Jupyter base environment"
+      default: true
+    - display_name: "pangeo/pangeo-notebook:2021.07.17"
+      description: "provides useful Earth science data analysis packages"
+      kubespawner_override:
+        # since these are provided, choose "production releases" (date tags!) only
+        image: pangeo/pangeo-notebook:2021.07.17
+
