@@ -37,6 +37,10 @@ proxy:
       key: tls.key
       crt: tls.crt
 
+scheduling:
+  userScheduler:
+    enabled: false
+
 singleuser:
   image:
     name: jupyter/base-notebook
