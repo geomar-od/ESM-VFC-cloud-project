@@ -14,5 +14,5 @@ gsutil cp -r $WORK/github/ESM-VFC-cloud-project/pi-workload.zarr gs://${GCP_BUCK
 # Operation completed over 51 objects/835.0 MiB.
 #
 
-gsutil rm gs://${GCP_BUCKET_NAME}/pi-workload.zarr
+gsutil rm -r gs://${GCP_BUCKET_NAME}/pi-workload.zarr
 
