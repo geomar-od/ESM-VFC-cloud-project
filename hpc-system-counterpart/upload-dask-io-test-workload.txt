@@ -1,0 +1,18 @@
+
+module load singularity/3.5.2
+
+singularity shell --bind $WORK/github/ESM-VFC-cloud-project cloud-sdk_slim.sif
+
+gcloud init
+source ../jupyterhub-gcp-deployment/gcp-bucket-config.sh
+gsutil cp -r $WORK/github/ESM-VFC-cloud-project/pi-workload.zarr gs://${GCP_BUCKET_NAME}/
+
+#
+# Copying file:///gxfs_work1/geomar/smomw260/github/ESM-VFC-cloud-project/pi-workload.zarr/28.0 [Content-Type=application/octet-stream]...
+# Copying file:///gxfs_work1/geomar/smomw260/github/ESM-VFC-cloud-project/pi-workload.zarr/23.0 [Content-Type=application/octet-stream]...
+# | [51 files][835.0 MiB/835.0 MiB]   31.2 MiB/s                                  
+# Operation completed over 51 objects/835.0 MiB.
+#
+
+gsutil rm gs://${GCP_BUCKET_NAME}/pi-workload.zarr
+
