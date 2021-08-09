@@ -55,4 +55,9 @@ singleuser:
       kubespawner_override:
         # since these are provided, choose "production releases" (date tags!) only
         image: pangeo/pangeo-notebook:2021.07.17
+  serviceAccountName: jupyterhub1-users
+  cloudMetadata:
+    blockWithIptables: false
+  networkPolicy:
+    enabled: true
 

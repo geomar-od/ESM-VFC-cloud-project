@@ -34,7 +34,12 @@ gsutil bucketpolicyonly get gs://${GCP_BUCKET_NAME}
 # Note, roles/storage.objectViewer includes permission to list the objects in the bucket. If you don't want to grant listing publicly, use roles/storage.legacyObjectReader.
 # Thinking about the least-privilege principle, that's what is chosen for now.
 
-gsutil iam get gs://${GCP_BUCKET_NAME}
-gsutil iam ch allUsers:legacyObjectReader gs://${GCP_BUCKET_NAME}
-gsutil iam get gs://${GCP_BUCKET_NAME}
+#gsutil iam get gs://${GCP_BUCKET_NAME}
+#gsutil iam ch allUsers:legacyObjectReader gs://${GCP_BUCKET_NAME}
+#gsutil iam get gs://${GCP_BUCKET_NAME}
+#gsutil iam ch -d allUsers gs://${GCP_BUCKET_NAME}
+
+# Assign read-only access to the jupyterhub user service account.
+
+gsutil iam ch ${BUCKET_IAM_SERVICE_ACCOUNT_NAME}:legacyObjectReader gs://${GCP_BUCKET_NAME}
 
