@@ -1,3 +1,6 @@
+
+# docker build --no-cache -t gcpsdk:latest .
+
 FROM ubuntu:21.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -11,9 +14,11 @@ RUN apt update \
       git \
       vim
 
-RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-348.0.0-linux-x86_64.tar.gz \
- && tar xf google-cloud-sdk-348.0.0-linux-x86_64.tar.gz \
- && rm google-cloud-sdk-348.0.0-linux-x86_64.tar.gz
+ARG GCSDKVER=352.0.0
+
+RUN wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCSDKVER}-linux-x86_64.tar.gz \
+ && tar xf google-cloud-sdk-${GCSDKVER}-linux-x86_64.tar.gz \
+ && rm google-cloud-sdk-${GCSDKVER}-linux-x86_64.tar.gz
 
 RUN /google-cloud-sdk/install.sh \
   --command-completion true \
@@ -33,4 +38,3 @@ RUN chmod +x /tini
 USER gcpuser
 WORKDIR /home/gcpuser
 ENTRYPOINT ["/tini", "--"]
-
