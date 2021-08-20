@@ -75,5 +75,5 @@ singleuser:
 #       apiToken: ...
 #
 # singleuser:
-#   serviceAccountName: jupyterhub1-users
+#   serviceAccountName: ...
 #
