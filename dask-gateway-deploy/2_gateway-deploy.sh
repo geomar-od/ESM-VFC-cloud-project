@@ -1,13 +1,25 @@
 
 source config.sh
 
-if [[ "$0" == "install" ]]; then
+helm list --namespace ${K8S_NAMESPACE}
 
-helm upgrade \
-  --install ${HELM_RELEASE_NAME} daskgateway/dask-gateway \
+if [[ "$1" == "install_create_namespace" ]]; then
+
+helm install \
+  ${HELM_RELEASE_NAME} daskgateway/dask-gateway \
   --create-namespace --namespace ${K8S_NAMESPACE} \
   --version ${HELM_CHART_VERSION} \
-  --values config.yaml
+  --values config.yaml \
+  --values secrets.yaml
+
+elif [[ "$1" == "install_into_namespace" ]]; then
+
+helm install \
+  ${HELM_RELEASE_NAME} daskgateway/dask-gateway \
+  --namespace ${K8S_NAMESPACE} \
+  --version ${HELM_CHART_VERSION} \
+  --values config.yaml \
+  --values secrets.yaml
 
 else
 
@@ -15,8 +27,9 @@ helm upgrade \
   ${HELM_RELEASE_NAME} daskgateway/dask-gateway \
   --namespace ${K8S_NAMESPACE} \
   --version ${HELM_CHART_VERSION} \
+  --cleanup-on-fail \
   --values config.yaml \
-  --cleanup-on-fail
+  --values secrets.yaml
 
 fi
 

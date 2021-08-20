@@ -22,3 +22,21 @@ gateway:
             Float("worker_memory", 1, min=1, max=16, label="Worker Memory (GiB)"),
             handler=option_handler,
         )
+
+# Alongside JupyterHub deployment.
+# https://github.com/dask/helm-chart/blob/main/daskhub/README.md
+
+#traefik:
+#  service:
+#    type: ClusterIP
+
+#
+# secrets.yaml
+#
+# gateway:
+#   auth:
+#     type: jupyterhub
+#     jupyterhub:
+#       apiToken: ...
+# #      apiUrl: ...
+#

@@ -9,6 +9,6 @@ source config.sh
 gcloud container clusters create \
   ${GKE_CLUSTER_NAME} \
   --zone ${GCP_RESOURCE_ZONE} \
-  --machine-type ${GKE_MACHINE_TYPE} \
+  --machine-type e2-medium \
   --num-nodes 1 \
   --cluster-version latest
