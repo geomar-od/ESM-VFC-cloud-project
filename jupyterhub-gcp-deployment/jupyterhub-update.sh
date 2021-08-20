@@ -8,7 +8,7 @@ helm upgrade \
   --namespace ${K8S_NAMESPACE} \
   --cleanup-on-fail \
   --version=1.1.1 \
-  --values config.yaml
+  --values config.yaml \
+  --values secrets.yaml
 
 kubectl get pod --namespace ${K8S_NAMESPACE}
-

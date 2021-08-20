@@ -12,6 +12,8 @@
 #
 
 hub:
+  networkPolicy:
+    enabled: false
   config:
     JupyterHub:
       authenticator_class: nativeauthenticator.NativeAuthenticator
@@ -27,6 +29,9 @@ hub:
       allow_2fa: false
 
 proxy:
+  chp:
+    networkPolicy:
+      enabled: false
   service:
     disableHttpPort: true
   https:
@@ -48,16 +53,27 @@ singleuser:
   defaultUrl: "/lab"
   profileList:
     - display_name: "jupyter/base-notebook:d39fb37995ce"
-      description: "very minimal Jupyter base environment"
+      description: "minimal Jupyter base environment"
       default: true
     - display_name: "pangeo/pangeo-notebook:2021.07.17"
-      description: "provides useful Earth science data analysis packages"
+      description: "Earth science data analysis packages w/ Dask cluster access"
       kubespawner_override:
-        # since these are provided, choose "production releases" (date tags!) only
         image: pangeo/pangeo-notebook:2021.07.17
-  serviceAccountName: jupyterhub1-users
+        # choose "production releases" (i.e. date tags) only
+        # and don't forget to manually adapt also the default Dask gateway image!
   cloudMetadata:
     blockWithIptables: false
   networkPolicy:
-    enabled: true
+    enabled: false
 
+#
+# secrets.yaml
+#
+# hub:
+#   services:
+#     dask-gateway:
+#       apiToken: ...
+#
+# singleuser:
+#   serviceAccountName: jupyterhub1-users
+#
