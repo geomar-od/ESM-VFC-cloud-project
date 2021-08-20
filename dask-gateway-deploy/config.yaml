@@ -5,6 +5,9 @@ gateway:
       name: pangeo/pangeo-notebook
       tag: 2021.07.17
       pullPolicy: IfNotPresent
+    worker:
+      extraPodConfig:
+        serviceAccountName: jupyterhub1-users
 
   extraConfig:
     clusteroptions: |
@@ -28,16 +31,12 @@ gateway:
 #    type: ClusterIP
 
 #
-# Secrets.yaml
+# secrets.yaml
 #
 # gateway:
 #   auth:
 #     type: jupyterhub
 #     jupyterhub:
 #       apiToken: ...
-#       apiUrl: ...
-#   backend:
-#     worker:
-#       extraPodConfig:
-#         serviceAccountName: ...
+# #      apiUrl: ...
 #
