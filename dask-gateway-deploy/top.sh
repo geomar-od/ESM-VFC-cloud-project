@@ -8,7 +8,8 @@ echo ''; kubectl get pod --all-namespaces \
   -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName
 
 #
-# Debugging
+# For debugging
 # https://kubernetes.io/docs/tasks/debug-application-cluster/_print/
-# kubectl describe pod dask-worker-.... --namespace ${K8S_NAMESPACE}
+#
+# kubectl describe pod --namespace ${K8S_NAMESPACE} ...
 #

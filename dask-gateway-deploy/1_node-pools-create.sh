@@ -7,10 +7,10 @@ echo ''; kubectl get nodes --namespace ${K8S_NAMESPACE}
 # 8 vCPU 32 GB
 
 gcloud container node-pools create \
-  dask-pool \
+  dask-worker-pool \
   --zone=${GCP_RESOURCE_ZONE} \
   --cluster=${GKE_CLUSTER_NAME} \
-  --machine-type=e2-standard-8 \ 
+  --machine-type=e2-standard-8 \
   --preemptible --num-nodes=1
 
 echo ''; gcloud container node-pools list --cluster ${GKE_CLUSTER_NAME} --zone ${GCP_RESOURCE_ZONE}

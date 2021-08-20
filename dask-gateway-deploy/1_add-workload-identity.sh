@@ -6,22 +6,25 @@ source config.sh
 
 GKE_WORKLOAD_POOL=${GCP_BILLING_PROJECT}.svc.id.goog
 
-# Update Kubernetes cluster and Kubernetes cluster node pools.
+# Update Kubernetes cluster.
 
-gcloud container clusters update \
-  ${GKE_CLUSTER_NAME} \
-  --zone=${GCP_RESOURCE_ZONE} \
-  --workload-pool=${GKE_WORKLOAD_POOL}
+# gcloud container clusters update \
+#   ${GKE_CLUSTER_NAME} \
+#   --zone=${GCP_RESOURCE_ZONE} \
+#   --workload-pool=${GKE_WORKLOAD_POOL}
 
-CLUSTER_NODEPOOL_NAME=default-pool
+# Update cluster node pools.
+# These should be array operations?
 
-gcloud container node-pools update \
-  ${CLUSTER_NODEPOOL_NAME} \
-  --cluster=${GKE_CLUSTER_NAME} \
-  --zone=${GCP_RESOURCE_ZONE} \
-  --workload-metadata=GKE_METADATA
+# CLUSTER_NODEPOOL_NAME=default-pool
 
-CLUSTER_NODEPOOL_NAME=dask-pool
+# gcloud container node-pools update \
+#   ${CLUSTER_NODEPOOL_NAME} \
+#   --cluster=${GKE_CLUSTER_NAME} \
+#   --zone=${GCP_RESOURCE_ZONE} \
+#   --workload-metadata=GKE_METADATA
+
+CLUSTER_NODEPOOL_NAME=dask-worker-pool
 
 gcloud container node-pools update \
   ${CLUSTER_NODEPOOL_NAME} \
@@ -30,6 +33,7 @@ gcloud container node-pools update \
   --workload-metadata=GKE_METADATA
 
 # Create and annotate Kubernetes service account.
+# These should be array operations?
 
 kubectl create serviceaccount \
   --namespace ${K8S_NAMESPACE} \
@@ -41,6 +45,7 @@ kubectl annotate serviceaccount \
   iam.gke.io/gcp-service-account=${IAM_SERVICE_ACCOUNT_NAME}
 
 # Bind Kubernetes service account to an existing IAM service account.
+# These should be array operations?
 
 gcloud iam service-accounts add-iam-policy-binding \
   --member "serviceAccount:${GKE_WORKLOAD_POOL}[${K8S_NAMESPACE}/${IAM_SERVICE_ACCOUNT_NAME_PREFIX}]" \
