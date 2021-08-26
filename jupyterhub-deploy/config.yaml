@@ -1,0 +1,58 @@
+
+hub:
+  config:
+    JupyterHub:
+      authenticator_class: nativeauthenticator.NativeAuthenticator
+      admin_access: false
+    Authenticator:
+      admin_users:
+        - user1
+    NativeAuthenticator:
+      enable_signup: true
+      minimum_password_length: 10
+      check_common_password: true
+      ask_email_on_signup: false
+      allow_2fa: false
+
+proxy:
+  service:
+    disableHttpPort: true
+  https:
+    enabled: true
+    type: secret
+    secret:
+      name: self-signed-tls-cert
+      key: tls.key
+      crt: tls.crt
+
+scheduling:
+  userScheduler:
+    enabled: false
+
+singleuser:
+  image:
+    name: jupyter/base-notebook
+    tag: d39fb37995ce
+  profileList:
+    - display_name: "jupyter/base-notebook:d39fb37995ce"
+      description: "minimal Jupyter base environment"
+      default: true
+    - display_name: "pangeo/pangeo-notebook:2021.07.17"
+      description: "Earth science data analysis packages w/ Dask cluster access"
+      kubespawner_override:
+        # only choose "production releases", i.e. date tags...
+        # don't forget to change the default Dask gateway image!
+        image: pangeo/pangeo-notebook:2021.07.17
+  defaultUrl: "/lab"
+  cloudMetadata:
+    blockWithIptables: false
+  serviceAccountName: jupyterhub2
+
+#
+# secrets.yaml
+#
+# hub:
+#   services:
+#     dask-gateway:
+#       apiToken: ...
+#
