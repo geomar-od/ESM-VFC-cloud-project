@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# gcloud compute machine-types list | head -n 1
+# gcloud compute machine-types list | grep europe-west3 # Frankfurt
+
 source config.sh
 
 if [[ "$1" == "create" ]]; then

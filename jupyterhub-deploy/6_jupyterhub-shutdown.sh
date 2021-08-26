@@ -2,6 +2,11 @@
 
 source config.sh
 
+# https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1934
+# https://kubesphere.io/docs/cluster-administration/shut-down-and-restart-cluster-gracefully/
+# https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/
+# https://kubernetes.io/blog/2021/04/21/graceful-node-shutdown-beta/
+
 echo ''; kubectl get nodes -o name --namespace ${K8S_NAMESPACE} | xargs -I {} \
   kubectl drain {} --force --ignore-daemonsets --delete-emptydir-data --grace-period=10
 
