@@ -3,6 +3,7 @@
 # For reference see the configuration reference and default values, but make
 # sure to refer to the Helm chart version of interest to you!
 #
+#
 # Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
 # Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
 # Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
@@ -12,8 +13,6 @@
 #
 
 hub:
-  networkPolicy:
-    enabled: false
   config:
     JupyterHub:
       authenticator_class: nativeauthenticator.NativeAuthenticator
@@ -29,16 +28,13 @@ hub:
       allow_2fa: false
 
 proxy:
-  chp:
-    networkPolicy:
-      enabled: false
   service:
     disableHttpPort: true
   https:
     enabled: true
     type: secret
     secret:
-      name: self-signed-tls
+      name: self-signed-tls-cert
       key: tls.key
       crt: tls.crt
 
@@ -50,7 +46,6 @@ singleuser:
   image:
     name: jupyter/base-notebook
     tag: d39fb37995ce
-  defaultUrl: "/lab"
   profileList:
     - display_name: "jupyter/base-notebook:d39fb37995ce"
       description: "minimal Jupyter base environment"
@@ -58,13 +53,13 @@ singleuser:
     - display_name: "pangeo/pangeo-notebook:2021.07.17"
       description: "Earth science data analysis packages w/ Dask cluster access"
       kubespawner_override:
+        # only choose "production releases", i.e. date tags...
+        # don't forget to change the default Dask gateway image!
         image: pangeo/pangeo-notebook:2021.07.17
-        # choose "production releases" (i.e. date tags) only
-        # and don't forget to manually adapt also the default Dask gateway image!
+  defaultUrl: "/lab"
   cloudMetadata:
     blockWithIptables: false
-  networkPolicy:
-    enabled: false
+  serviceAccountName: jupyterhub2
 
 #
 # secrets.yaml
@@ -73,7 +68,4 @@ singleuser:
 #   services:
 #     dask-gateway:
 #       apiToken: ...
-#
-# singleuser:
-#   serviceAccountName: ...
 #
