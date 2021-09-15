@@ -9,15 +9,18 @@ GCP_RESOURCE_ZONE=${GCP_RESOURCE_ZONE}
 # JupyterHub Kubernetes cluster name.
 
 GKE_CLUSTER_NAME=jupyterhub2
+GKE_CLUSTER_NAME=jupyterhub-cluster-1
 
 # Kubernetes namespace.
 
 K8S_NAMESPACE=jupyterhub2
+K8S_NAMESPACE=jupyterhub-k8s-1
 
 # Helm release options.
 
 HELM_RELEASE_NAME=jupyterhub2
 HELM_CHART_VERSION=1.1.2
+HELM_RELEASE_NAME=jupyterhub-hr-1
 
 # Specify Google workload identity stuff.
 # Will be used to access non-public GCP object storage.
