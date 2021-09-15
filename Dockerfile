@@ -1,5 +1,6 @@
 
 # docker build --no-cache -t gcpsdk:latest .
+# docker run -it --rm -v $PWD:/home/gcpuser/ESM-VFC-cloud-project gcpsdk:latest /bin/bash
 
 FROM ubuntu:21.04
 
