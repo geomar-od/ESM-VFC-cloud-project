@@ -1,14 +1,38 @@
-gateway:
 
+# Alongside JupyterHub deployment. Useful resources:
+# https://gateway.dask.org/install-kube.html#authenticating-with-jupyterhub
+# https://github.com/pangeo-data/pangeo-cloud-federation/issues/584#issuecomment-621471832
+# https://jupyterhub.readthedocs.io/en/stable/reference/services.html#properties-of-a-service
+# # https://github.com/dask/helm-chart/blob/main/daskhub/README.md
+
+gateway:
+  prefix: "/services/dask-gateway" # This has to match the service name specified in the JupyterHub Helm chart. Otherwise the Dask dashboard won't be reachable.
+  nodeSelector:
+    cloud.google.com/gke-nodepool: core-pool
   backend:
     image:
       name: pangeo/pangeo-notebook
       tag: 2021.07.17
       pullPolicy: IfNotPresent
+    scheduler:
+      extraPodConfig:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: cloud.google.com/gke-preemptible
+                    operator: DoesNotExist
     worker:
       extraPodConfig:
-        serviceAccountName: jupyterhub1-users
-
+        serviceAccountName: jupyterhub2
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: cloud.google.com/gke-preemptible
+                    operator: Exists
   extraConfig:
     clusteroptions: |
         from dask_gateway_server.options import Options, Integer, Float, String
@@ -18,17 +42,20 @@ gateway:
                 "worker_memory": "%fG" % options.worker_memory,
             }
         c.Backend.cluster_options = Options(
-            Integer("worker_cores", 1, min=1, max=4, label="Worker Cores"),
-            Float("worker_memory", 1, min=1, max=16, label="Worker Memory (GiB)"),
+            Integer("worker_cores", 1, min=1, max=7, label="Worker Cores"),
+            Float("worker_memory", 1, min=1, max=32, label="Worker Memory (GiB)"),
             handler=option_handler,
         )
 
-# Alongside JupyterHub deployment.
-# https://github.com/dask/helm-chart/blob/main/daskhub/README.md
+traefik:
+  service:
+    type: ClusterIP
+  nodeSelector:
+    cloud.google.com/gke-nodepool: core-pool
 
-#traefik:
-#  service:
-#    type: ClusterIP
+controller:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: core-pool
 
 #
 # secrets.yaml
@@ -37,6 +64,6 @@ gateway:
 #   auth:
 #     type: jupyterhub
 #     jupyterhub:
-#       apiToken: ...
-# #      apiUrl: ...
+#       apiToken: "..." # $ openssl rand -hex 32
+#       apiUrl: http://hub:8081/hub/api # this address is optional, if the hub is in the same namespace as Dask gateway
 #
