@@ -13,4 +13,4 @@ singularity run \
 --bind /gxfs_work1/geomar/smomw260/github/ESM-VFC-cloud-project \
 --bind /scratch \
 /gxfs_home/geomar/smomw260/github/ESM-VFC-cloud-project/performance/pangeo-notebook_2021.07.17.sif \
-dask-worker 172.18.4.12:37081 --interface ib0 --nthreads 7 --memory-limit 32GiB
+dask-worker 172.18.4.12:46517 --interface ib0 --nthreads 7 --memory-limit 32GiB
