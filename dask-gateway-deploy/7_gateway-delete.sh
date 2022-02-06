@@ -1,3 +1,4 @@
+#!/bin/bash
 
 source config.sh
 
@@ -11,7 +12,11 @@ helm delete \
 
 helm list --namespace ${K8S_NAMESPACE}
 
-# Delete GKE cluster.
+# Delete separate GKE cluster.
 
-gcloud container clusters delete \
-  ${GKE_CLUSTER_NAME} --zone ${GCP_RESOURCE_ZONE}
+if [[ ${ALONGSIDE_JUPYTERHUB} == 0 ]]; then
+
+  gcloud container clusters delete \
+    ${GKE_CLUSTER_NAME} --zone ${GCP_RESOURCE_ZONE}
+
+fi

@@ -3,6 +3,7 @@
 source config.sh
 
 CLUSTER_NODE_POOL_NAMES=(default-pool jupyter-user-pool)
+CLUSTER_NODE_POOL_NAMES=(jupyter-user-pool)
 
 for NODE_POOL_NAME in ${CLUSTER_NODE_POOL_NAMES[@]}; do
 
