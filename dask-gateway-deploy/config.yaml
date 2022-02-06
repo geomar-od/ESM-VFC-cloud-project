@@ -3,7 +3,7 @@
 # https://gateway.dask.org/install-kube.html#authenticating-with-jupyterhub
 # https://github.com/pangeo-data/pangeo-cloud-federation/issues/584#issuecomment-621471832
 # https://jupyterhub.readthedocs.io/en/stable/reference/services.html#properties-of-a-service
-# # https://github.com/dask/helm-chart/blob/main/daskhub/README.md
+# https://github.com/dask/helm-chart/blob/main/daskhub/README.md
 
 gateway:
   prefix: "/services/dask-gateway" # This has to match the service name specified in the JupyterHub Helm chart. Otherwise the Dask dashboard won't be reachable.

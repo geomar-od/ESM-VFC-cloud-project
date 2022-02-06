@@ -8,6 +8,7 @@ GCP_RESOURCE_ZONE=${GCP_RESOURCE_ZONE}
 
 # Dask gateway default node pool.
 
+ALONGSIDE_JUPYTERHUB=0 # 1: yes, 0: no
 GKE_CLUSTER_NAME=daskgateway2
 
 # Kubernetes namespace.
@@ -33,10 +34,11 @@ GKE_WORKLOAD_POOL=${GCP_BILLING_PROJECT}.svc.id.goog # Don't change.
 # https://gateway.dask.org/install-kube.html#authenticating-with-jupyterhub
 # This is convenient, therefore specify the JupyterHub's Kubernetes namespace.
 
+ALONGSIDE_JUPYTERHUB=1 # 1: yes, 0: no
 GKE_CLUSTER_NAME=jupyterhub2
 K8S_NAMESPACE=jupyterhub2
 
-# For simplicity, we'll also rely on JupyterHub's service account for non-public storage authorization here.
+# For simplicity, we'll also rely on JupyterHub's service account for storage access.
 
 IAM_SERVICE_ACCOUNT_PREFIX=jupyterhub2
 IAM_SERVICE_ACCOUNT_SUFFIX=${GCP_BILLING_PROJECT}.iam.gserviceaccount.com # Don't change.
