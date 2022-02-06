@@ -11,15 +11,21 @@ if [[ "$1" == "create" ]]; then
     ${GKE_CLUSTER_NAME} --zone ${GCP_RESOURCE_ZONE} \
     --machine-type e2-medium --num-nodes 1
 
-elif [[ "$1" == "update" ]]; then
+elif [[ "$1" == "configure" ]]; then
 
-  # Non-default specifications here.
-  # 1) Workload Identity
-  # 2) ...
+  # Enable workload identity feature.
+  # https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#workload_identity
 
   gcloud container clusters update \
     ${GKE_CLUSTER_NAME} --zone=${GCP_RESOURCE_ZONE} \
     --workload-pool=${GKE_WORKLOAD_POOL}
+  
+  # Enable "aggressive" autoscaling profile.
+  # https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler#autoscaling_profiles
+
+  gcloud container clusters update \
+    ${GKE_CLUSTER_NAME} --zone=${GCP_RESOURCE_ZONE} \
+    --autoscaling-profile=optimize-utilization
 
 else
 

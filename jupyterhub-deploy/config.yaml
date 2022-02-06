@@ -13,6 +13,14 @@
 #
 
 hub:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: core-pool
+  resources:
+    requests:
+      cpu: 0m # 0m - 1000m (2-4m)
+      memory: 350Mi # 200Mi - 4Gi (100-400 Mi)
+  networkPolicy:
+    enabled: false
   config:
     JupyterHub:
       authenticator_class: nativeauthenticator.NativeAuthenticator
@@ -28,6 +36,15 @@ hub:
       allow_2fa: false
 
 proxy:
+  chp:
+    nodeSelector:
+      cloud.google.com/gke-nodepool: core-pool
+    resources:
+      requests:
+        cpu: 0m # 0m - 1000m (5-15m)
+        memory: 100Mi # 100Mi - 600Mi (20-40Mib)
+    networkPolicy:
+      enabled: false
   service:
     disableHttpPort: true
   https:
@@ -38,28 +55,40 @@ proxy:
       key: tls.key
       crt: tls.crt
 
-scheduling:
-  userScheduler:
-    enabled: false
-
 singleuser:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: jupyter-user-pool
+  networkPolicy:
+    enabled: false
+  cloudMetadata:
+    blockWithIptables: false
+  serviceAccountName: jupyterhub2
   image:
     name: jupyter/base-notebook
     tag: d39fb37995ce
+  defaultUrl: "/lab"
   profileList:
     - display_name: "jupyter/base-notebook:d39fb37995ce"
       description: "minimal Jupyter base environment"
       default: true
     - display_name: "pangeo/pangeo-notebook:2021.07.17"
-      description: "Earth science data analysis packages w/ Dask cluster access"
+      description: "Earth system science data analysis packages w/ Dask cluster access"
       kubespawner_override:
         # only choose "production releases", i.e. date tags...
-        # don't forget to change the default Dask gateway image!
+        # don't forget to change the default Dask gateway image as well!
         image: pangeo/pangeo-notebook:2021.07.17
-  defaultUrl: "/lab"
-  cloudMetadata:
-    blockWithIptables: false
-  serviceAccountName: jupyterhub2
+
+scheduling:
+  userScheduler:
+    enabled: false
+    replicas: 0
+  userPlaceholder:
+    enabled: false
+    replicas: 0
+
+prePuller:
+  continuous:
+    enabled: true
 
 #
 # secrets.yaml
@@ -67,5 +96,6 @@ singleuser:
 # hub:
 #   services:
 #     dask-gateway:
-#       apiToken: ...
+#       apiToken: "..." # $ openssl rand -hex 32
+#       url: http://traefik-daskgateway2-dask-gateway:80 # this address is mandatory!
 #
