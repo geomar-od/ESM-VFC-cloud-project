@@ -1,53 +1,32 @@
+#!/bin/bash
 
 source config.sh
 
-# Currently, the only accepted workload pool is the workload pool
-# of the billing cloud project: PROJECT_ID.svc.id.goog
+if [[ ${ALONGSIDE_JUPYTERHUB} == 0 ]]; then
 
-GKE_WORKLOAD_POOL=${GCP_BILLING_PROJECT}.svc.id.goog
+  # Create project-wide Google service account.
 
-# Update Kubernetes cluster.
+  gcloud iam service-accounts create \
+    ${IAM_SERVICE_ACCOUNT_PREFIX}
 
-# gcloud container clusters update \
-#   ${GKE_CLUSTER_NAME} \
-#   --zone=${GCP_RESOURCE_ZONE} \
-#   --workload-pool=${GKE_WORKLOAD_POOL}
+  # Create Kubernetes cluster service account.
 
-# Update cluster node pools.
-# These should be array operations?
+  kubectl create serviceaccount ${IAM_SERVICE_ACCOUNT_PREFIX} \
+    --namespace ${K8S_NAMESPACE}
 
-# CLUSTER_NODEPOOL_NAME=default-pool
+  # Allow the Kubernetes service account to impersonate the Google service account.
+  # Note, if this IAM binding does not exist, the Pod will not be able to use the Google service account.
 
-# gcloud container node-pools update \
-#   ${CLUSTER_NODEPOOL_NAME} \
-#   --cluster=${GKE_CLUSTER_NAME} \
-#   --zone=${GCP_RESOURCE_ZONE} \
-#   --workload-metadata=GKE_METADATA
+  gcloud iam service-accounts add-iam-policy-binding \
+    ${IAM_SERVICE_ACCOUNT_NAME} \
+    --member "serviceAccount:${GKE_WORKLOAD_POOL}[${K8S_NAMESPACE}/${IAM_SERVICE_ACCOUNT_PREFIX}]" \
+    --role roles/iam.workloadIdentityUser
 
-CLUSTER_NODEPOOL_NAME=dask-worker-pool
+  # Annotate the Kubernetes cluster with the Google IAM service account.
 
-gcloud container node-pools update \
-  ${CLUSTER_NODEPOOL_NAME} \
-  --cluster=${GKE_CLUSTER_NAME} \
-  --zone=${GCP_RESOURCE_ZONE} \
-  --workload-metadata=GKE_METADATA
+  kubectl annotate serviceaccount ${IAM_SERVICE_ACCOUNT_PREFIX} \
+    iam.gke.io/gcp-service-account=${IAM_SERVICE_ACCOUNT_NAME} \
+    --namespace ${K8S_NAMESPACE} \
+    --overwrite
 
-# Create and annotate Kubernetes service account.
-# These should be array operations?
-
-kubectl create serviceaccount \
-  --namespace ${K8S_NAMESPACE} \
-  ${IAM_SERVICE_ACCOUNT_NAME_PREFIX}
-
-kubectl annotate serviceaccount \
-  --namespace ${K8S_NAMESPACE} \
-  ${IAM_SERVICE_ACCOUNT_NAME_PREFIX} \
-  iam.gke.io/gcp-service-account=${IAM_SERVICE_ACCOUNT_NAME}
-
-# Bind Kubernetes service account to an existing IAM service account.
-# These should be array operations?
-
-gcloud iam service-accounts add-iam-policy-binding \
-  --member "serviceAccount:${GKE_WORKLOAD_POOL}[${K8S_NAMESPACE}/${IAM_SERVICE_ACCOUNT_NAME_PREFIX}]" \
-  --role roles/iam.workloadIdentityUser \
-  ${IAM_SERVICE_ACCOUNT_NAME}
+fi
